@@ -3,13 +3,14 @@
     <Header />
     <AddTodo v-on:add-todo="addTodo"/>
     <Todos v-bind:todos="todos" v-on:del-todo="deleteTodo" />
-  </div>
+  </div>  
 </template>
 
 <script>
 import Header from "./components/layout/Header";
 import Todos from "./components/Todos";
 import AddTodo from "./components/AddTodoItem";
+import axios from "axios";
 
 export default {
   name: "app",
@@ -20,28 +21,7 @@ export default {
   },
   data() {
     return {
-      todos: [
-        {
-          id: 0,
-          title: "Learn Vue and then look at Nuxt",
-          completed: false
-        },
-        {
-          id: 1,
-          title: "Enjoy it",
-          completed: false
-        },
-        {
-          id: 2,
-          title: "Drink beer",
-          completed: true
-        },
-        {
-          id: 3,
-          title: "Refactor code",
-          completed: false
-        }
-      ]
+      todos: []
     }
   },
 
@@ -50,8 +30,12 @@ export default {
       this.todos = this.todos.filter(todo => todo.id !== id);
     },
     addTodo(newTodo) {
-      this.todos = [...this.todos, newTodo]
+      this.todos = [...this.todos, newTodo];
     }
+  },
+  created() {
+    axios.get('https://jsonplaceholder.typicode.com/todos?_limit=5')
+    .then(res => this.todos = res.data)
   }
 };
 </script>
